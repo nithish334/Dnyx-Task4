@@ -1,19 +1,18 @@
 import express from "express";
 import mongoose from "mongoose";
-import noteRoutes from "./routes/notes.js";
+import dotenv from "dotenv";
+
+dotenv.config();   // 🔑 loads .env file
 
 const app = express();
 
+// 🔗 MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("MongoDB connected successfully"))
+  .catch(err => console.error(err));
+
 app.use(express.json());
 
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB connected"))
-  .catch(err => console.log(err));
-
-app.use("/api/notes", noteRoutes);
-
-app.get("/", (req, res) => {
-  res.send("Notes API is running");
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
 });
-
-export default app;
